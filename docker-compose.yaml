@@ -1,0 +1,42 @@
+version: '3.0'
+services: 
+
+  cookable:
+    image: roscloud/cookable-api
+    ports:
+     - 8080:8080
+    env_file: 
+      - ./.env
+    environment: 
+      PORT: 8080
+      DATABASE_URL: mysql://cookable:ciscocisco@mysql:3306/Cookable
+      REFRESH_KEY: 9anCoTpma0tMAwDwpVka
+      JWT_SECRET: gp0RKQ1IwhuN0QEezUki
+    depends_on: 
+      - mysql
+    
+  mysql:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: &DATABASE_ROOT_PASSWORD "ciscocisco"
+      MYSQL_DATABASE: &DATABASE_NAME "Cookable"
+      MYSQL_USER: &DATABASE_USER "cookable"
+      MYSQL_PASSWORD: &DATABASE_PASSWORD "ciscocisco"
+    volumes:
+      - ./DB_Cookable_V7.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - mysql-volume:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    environment:
+        PMA_USER: *DATABASE_USER
+        PMA_PASSWORD: *DATABASE_PASSWORD
+        PMA_HOSTS: mysql
+    ports:
+        - 8081:80
+    depends_on: 
+      - mysql
+
+volumes: 
+  mysql-volume:
