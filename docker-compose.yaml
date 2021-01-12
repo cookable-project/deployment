@@ -10,8 +10,8 @@ services:
     environment: 
       PORT: 8080
       DATABASE_URL: mysql://cookable:ciscocisco@mysql:3306/Cookable
-      REFRESH_KEY: 9anCoTpma0tMAwDwpVka
-      JWT_SECRET: gp0RKQ1IwhuN0QEezUki
+      REFRESH_KEY: ${JWT_SECRET_KEY}
+      JWT_SECRET: ${REFRESH_KEY}
     depends_on: 
       - mysql
     
